@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import org.apache.curator.framework.CuratorFramework;
+import org.I0Itec.zkclient.ZkClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
-@ConditionalOnClass(CuratorFramework.class)
+@ConditionalOnClass(ZkClient.class)
 @Configuration
 @ComponentScan(basePackages = {"com.zisuye.registry"})
 public class RegistryAutoConfiguration {
