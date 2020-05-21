@@ -1,4 +1,4 @@
-package com.zisuye.registry.properties;
+package com.zisuye.registry.center.properties;
 
 import lombok.Getter;
 import lombok.Setter;

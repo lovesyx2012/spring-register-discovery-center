@@ -1,15 +1,21 @@
-package com.zisuye.registry.config;
+package com.zisuye.registry.center.config;
 
-import com.zisuye.registry.RegistryCenter;
-import com.zisuye.registry.properties.RegistryProperties;
+import com.zisuye.registry.center.RegistryCenter;
+import com.zisuye.registry.center.context.RegistryCenterContext;
+import com.zisuye.registry.center.properties.RegistryProperties;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 import javax.annotation.PostConstruct;
+import org.apache.curator.framework.CuratorFramework;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+@ConditionalOnClass(CuratorFramework.class)
 @Configuration
 @ComponentScan(basePackages = {"com.zisuye.registry"})
 public class RegistryAutoConfiguration {
@@ -48,7 +54,13 @@ public class RegistryAutoConfiguration {
     }
 
     if (discovery) {
-
+      List<String> serverList = registryCenter.discoveryService(zkAddress, serviceName);
+      registryCenterContext(serverList);
     }
+  }
+
+  @Bean
+  public RegistryCenterContext registryCenterContext(List<String> serverList) {
+    return new RegistryCenterContext(serverList);
   }
 }

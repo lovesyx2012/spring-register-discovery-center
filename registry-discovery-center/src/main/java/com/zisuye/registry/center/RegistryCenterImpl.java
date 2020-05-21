@@ -1,6 +1,6 @@
-package com.zisuye.registry;
+package com.zisuye.registry.center;
 
-import com.zisuye.registry.constants.Constants;
+import com.zisuye.registry.center.constants.Constants;
 import java.util.List;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -54,14 +54,22 @@ public class RegistryCenterImpl implements RegistryCenter {
     // 连接 zk
     curatorFramework = getCuratorFramework(zkAddress);
 
+    System.out.println(zkAddress);
+    System.out.println(serviceName);
+    System.out.println(serviceAddress);
+
     try {
       // 根节点
-      if (curatorFramework.checkExists().forPath(Constants.registry) == null) {
-        curatorFramework.create().withMode(CreateMode.PERSISTENT).forPath(Constants.registry);
+      if (curatorFramework.checkExists().forPath( Constants.REGISTRY) == null) {
+        curatorFramework.create().withMode(CreateMode.PERSISTENT).forPath(Constants.REGISTRY);
       }
 
+      System.out.println(zkAddress);
+      System.out.println(serviceName);
+      System.out.println(serviceAddress);
+
       // 服务节点
-      String serviceNode = Constants.registry + "/" + serviceName + "/" + serviceAddress;
+      String serviceNode = Constants.REGISTRY + "/" + serviceName + "/" + serviceAddress;
       curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL)
           .forPath(serviceNode);
 
@@ -84,7 +92,7 @@ public class RegistryCenterImpl implements RegistryCenter {
     curatorFramework = getCuratorFramework(zkAddress);
 
     // 服务节点
-    String serviceNode = Constants.registry + "/" + serviceName;
+    String serviceNode = Constants.REGISTRY + "/" + serviceName;
 
     try {
       return curatorFramework.getChildren().forPath(serviceNode);

@@ -1,4 +1,4 @@
-package com.zisuye.registry;
+package com.zisuye.registry.center;
 
 import java.util.List;
 
