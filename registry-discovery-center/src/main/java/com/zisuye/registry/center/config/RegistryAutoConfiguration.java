@@ -6,6 +6,7 @@ import com.zisuye.registry.center.properties.RegistryProperties;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.I0Itec.zkclient.ZkClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +55,13 @@ public class RegistryAutoConfiguration {
     }
 
     if (discovery) {
-      List<String> serverList = registryCenter.discoveryService(zkAddress, serviceName);
-      registryCenterContext(serverList);
+      Map<String, List<String>> serviceList = registryCenter.discoveryService(zkAddress);
+      registryCenterContext(serviceList);
     }
   }
 
   @Bean
-  public RegistryCenterContext registryCenterContext(List<String> serverList) {
-    return new RegistryCenterContext(serverList);
+  public RegistryCenterContext registryCenterContext(Map<String, List<String>> serviceList) {
+    return new RegistryCenterContext(serviceList);
   }
 }

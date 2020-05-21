@@ -1,7 +1,9 @@
 package com.zisuye.registry.center;
 
 import com.zisuye.registry.center.constants.Constants;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.serialize.SerializableSerializer;
 import org.springframework.stereotype.Component;
@@ -38,10 +40,6 @@ public class RegistryCenterImpl implements RegistryCenter {
     // 连接 zk
     zkClient = getZkClient(zkAddress);
 
-    System.out.println(zkAddress);
-    System.out.println(serviceName);
-    System.out.println(serviceAddress);
-
     try {
       // 根节点
       if (!zkClient.exists(Constants.REGISTRY)) {
@@ -67,17 +65,23 @@ public class RegistryCenterImpl implements RegistryCenter {
    * 服务发现
    *
    * @param zkAddress   zk地址
-   * @param serviceName 服务名
    * @return
    */
   @Override
-  public List<String> discoveryService(String zkAddress, String serviceName) {
+  public Map<String, List<String>> discoveryService(String zkAddress) {
     // 连接 zk
     zkClient = getZkClient(zkAddress);
 
     // 服务节点
-    String serviceNode = Constants.REGISTRY + "/" + serviceName;
+    String registryNode = Constants.REGISTRY;
 
-    return zkClient.getChildren(serviceNode);
+    List<String> serviceNodes =  zkClient.getChildren(registryNode);
+
+    Map<String, List<String>> map = new HashMap<>();
+    for (String serviceNode : serviceNodes) {
+      map.put(serviceNode, zkClient.getChildren(registryNode + "/" + serviceNode));
+    }
+
+    return map;
   }
 }

@@ -1,10 +1,11 @@
 package com.zisuye.registry.center;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RegistryCenter {
 
   void registryService(String zkAddress, String serviceName, String serviceAddress);
 
-  List<String> discoveryService(String zkAddress, String serviceName);
+  Map<String, List<String>> discoveryService(String zkAddress);
 }
