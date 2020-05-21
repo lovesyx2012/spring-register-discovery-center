@@ -17,7 +17,7 @@ public class UserController {
 
   @GetMapping("/user/remote/sayHi")
   public String sayHi() {
-    String serviceURL = "http://" + registryCenterContext.getServer("registry-discovery-consumer") + "/user/sayHi";
+    String serviceURL = "http://" + registryCenterContext.getServer("registry-discovery-provider") + "/user/sayHi";
     System.out.println(serviceURL);
     ResponseEntity<String> responseEntity = restTemplate.getForEntity(serviceURL, String.class);
     String body = responseEntity.getBody();
